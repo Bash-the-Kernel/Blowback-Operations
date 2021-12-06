@@ -114,7 +114,7 @@ public class house_generator : MonoBehaviour
         if (player.position.x < transform.position.x + width / 2 && player.position.x > transform.position.x - width / 2
             && player.position.z < transform.position.z + length / 2 && player.position.z > transform.position.z - length / 2)
         {
-            print("go get fucked you bastard");
+            //print("go get fucked you bastard");
             roof_.SetActive(false);
         }
         else
