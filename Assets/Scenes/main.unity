@@ -187,6 +187,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 348036491}
   moveSpeed: 40
+  bullet: {fileID: 4949970145546994738, guid: d200fbe17ccb2ff40a2c27b4e6a37a17, type: 3}
 --- !u!212 &348036488
 SpriteRenderer:
   m_ObjectHideFlags: 0
