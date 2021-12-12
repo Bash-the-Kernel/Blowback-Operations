@@ -57,6 +57,7 @@ public class player_control : MonoBehaviour
         if (shooting)
         {
             shoot();
+            //bruh
         }
 
     }
