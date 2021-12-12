@@ -69,8 +69,7 @@ public class HealthManager : MonoBehaviour
 
     public void decreaseHealth( string inputs )
     {
-        var result = bodyParts.Where(kvp => kvp.Value == "head");
-        Debug.Log( result );
+
         Debug.Log( bodyParts[1] );
         string temp = inputs.Substring( 0 , 3 );
         int damage = int.Parse( temp );
