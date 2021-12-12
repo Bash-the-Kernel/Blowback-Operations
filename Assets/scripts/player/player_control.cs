@@ -7,10 +7,10 @@ public class player_control : MonoBehaviour
     private Vector3 moveDirection;
     public Rigidbody rb;
     public float moveSpeed;
+    public GameObject bullet;
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     // Update is called once per frame
@@ -49,12 +49,28 @@ public class player_control : MonoBehaviour
         //takes input, essentially getaxisraw takes WASD and the arrow keys as "directions"
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
-        moveDirection = new Vector3(moveX, 0 , moveY).normalized;
+
+        bool shooting = Input.GetMouseButtonDown(0);
+
+        moveDirection = new Vector3(moveX, 0, moveY).normalized;
+
+        if (shooting)
+        {
+            shoot();
+        }
+
     }
 
-    void shot()
+    void shoot()
     {
+        Quaternion bullet_rot = transform.rotation;
+        Vector3 bullet_pos = GameObject.Find("firepoint").transform.position;
+        GameObject bullet_parent = GameObject.Find("player_parent");
 
+        bullet_pos.y = 1;
+        print(transform.rotation.eulerAngles.x);
+        bullet_rot.eulerAngles.Set(90, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
+        Instantiate(bullet, bullet_pos, bullet_rot, bullet_parent.transform);
     }
 
     void Move()
