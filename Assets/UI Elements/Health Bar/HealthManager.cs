@@ -6,7 +6,13 @@ using UnityEngine.UI;
 public class HealthManager : MonoBehaviour
 {
     public Text healthText;
-    public Image healthBar;
+    public Image headHealth;
+    public Image torsoHealth;
+    public Image leftArmHealth;
+    public Image rightArmHealth;
+    public Image leftLegHealth;
+    public Image rightLegHealth;
+
     
     float health , maxHealth = 100;
 
@@ -56,14 +62,16 @@ public class HealthManager : MonoBehaviour
 
     void HealthBarFiller()
     {
-
-        healthBar.fillAmount = Mathf.Lerp( healthBar.fillAmount , health / maxHealth , changeSpeed );
+        Debug.Log( bodyParts[1] );
+        headHealth.fillAmount = Mathf.Lerp( headHealth.fillAmount , health / maxHealth , changeSpeed );
         
     }
 
     public void decreaseHealth( string inputs )
     {
-        
+        var result = bodyParts.Where(kvp => kvp.Value == "head");
+        Debug.Log( result );
+        Debug.Log( bodyParts[1] );
         string temp = inputs.Substring( 0 , 3 );
         int damage = int.Parse( temp );
         int ind = inputs.LastIndexOf( ':' );
@@ -89,7 +97,7 @@ public class HealthManager : MonoBehaviour
     {
 
         Color healthColour = Color.Lerp( Color.red , Color.green , ( health / maxHealth ));
-        healthBar.color = healthColour;
+        headHealth.color = healthColour;
 
     }
 }
