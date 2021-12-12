@@ -15,7 +15,7 @@ public class HealthManager : MonoBehaviour
     float left_ArmMaxHealth , right_ArmMaxHealth = 60;
     float left_legMaxHealth , right_legMaxHealth = 80;
 
-
+    List<KeyValuePair<string, int>> bodyParts = new List<KeyValuePair<string, int>>();
 
     float changeSpeed;
     
@@ -43,9 +43,8 @@ public class HealthManager : MonoBehaviour
     }
     
 
-    static void defineThings()
+    void defineThings()
     {
-        var bodyParts = new List<KeyValuePair< string , int >>();
         bodyParts.Add(new KeyValuePair< string , int >("head" , 70 ));
         bodyParts.Add(new KeyValuePair< string , int >("torsoHealth" , 100 ));
         bodyParts.Add(new KeyValuePair< string , int >("left_ArmHealth" , 60 ));
