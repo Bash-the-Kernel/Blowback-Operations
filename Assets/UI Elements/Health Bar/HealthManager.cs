@@ -90,16 +90,14 @@ public class HealthManager : MonoBehaviour
     public void decreaseHealth( string inputs )
     {
   
-        //Debug.Log( bodyParts[1] );
+        // decodes input (e.g. 005:headHealth) to usuable values
         string temp = inputs.Substring( 0 , 3 );
         int damage = int.Parse( temp );
         int ind = inputs.LastIndexOf( ':' );
         temp = inputs.Substring(ind + 1);
         bodyPart = temp;
 
-        //Debug.Log(determinePart(bodyPart));
-        
-        //Debug.Log(bodyParts[bodyPart]);
+        // does damage
         if ( bodyParts[bodyPart] > 0 )
             bodyParts[bodyPart] -= damage;
 
@@ -108,13 +106,14 @@ public class HealthManager : MonoBehaviour
     
     public void increaseHealth( string inputs )
     {
-
+        // decodes input (e.g. 005:headHealth) to usuable values
         string temp = inputs.Substring( 0 , 3 );
         int healing = int.Parse( temp );
         int ind = inputs.LastIndexOf( ':' );
         temp = inputs.Substring(ind + 1);
         bodyPart = temp;
-        //Debug.Log(bodyPart);
+        
+        // does healing
         switch (bodyPart)
         {
             case "headHealth":
@@ -152,6 +151,7 @@ public class HealthManager : MonoBehaviour
 
     void colourChanger()
     {
+        // changes colour by body part
         switch (bodyPart)
         {
             case "headHealth":
