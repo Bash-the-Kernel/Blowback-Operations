@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 
+
 public class HealthManager : MonoBehaviour
 {
     public Text healthText;
@@ -16,6 +17,7 @@ public class HealthManager : MonoBehaviour
 
     
     float health , maxHealth = 100;
+
 
     string bodyPart = "headHealth";
 
@@ -62,14 +64,16 @@ public class HealthManager : MonoBehaviour
         bodyParts.Add("right_ArmHealth" , 60 );
         bodyParts.Add("left_LegHealth" , 80 );
         bodyParts.Add("right_LegHealth" , 80 );
+
     }
 
     void HealthBarFiller()
     {
-        headHealth.fillAmount = Mathf.Lerp( headHealth.fillAmount , health / maxHealth , changeSpeed );
+
+        //Debug.Log( bodyParts[1] );
+        headHealth.fillAmount = Mathf.Lerp( headHealth.fillAmount , bodyParts[bodyPart] / headMaxHealth , changeSpeed );
         
     }
-
 
     static string determinePart(string value)
     {
