@@ -16,11 +16,17 @@ public class bullet_controller_ : MonoBehaviour
 
 
     }
+
+    IEnumerator destroy_after(float time)
+    {
+        yield return new WaitForSeconds(time);
+        Destroy(gameObject);
+    }
     
 
     void Start()
     {
-
+        destroy_after(10.0f);
     }
 
     // Update is called once per frame
