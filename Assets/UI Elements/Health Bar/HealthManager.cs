@@ -8,12 +8,26 @@ using System.Linq;
 public class HealthManager : MonoBehaviour
 {
     public Text healthText;
+    public Text headHealthText;
+    public Text torsoHealthText;
+    public Text leftArmHealthText;
+    public Text rightArmHealthText;
+    public Text leftLegHealthText;
+    public Text rightLegHealthText;
+    
     public Image headHealth;
     public Image torsoHealth;
     public Image leftArmHealth;
     public Image rightArmHealth;
     public Image leftLegHealth;
     public Image rightLegHealth;
+
+    public Color healthColourHead = Color.green;
+    public Color healthColourTorso = Color.green;
+    public Color healthColourLeftArm = Color.green;
+    public Color healthColourRightArm = Color.green;
+    public Color healthColourLeftLeg = Color.green;
+    public Color healthColourRightLeg = Color.green;
 
     
     float health , maxHealth = 100;
@@ -23,8 +37,8 @@ public class HealthManager : MonoBehaviour
 
     float headMaxHealth = 70;
     float torsoMaxHealth = 100;
-    float left_ArmMaxHealth , right_ArmMaxHealth = 60;
-    float left_LegMaxHealth , right_LegMaxHealth = 80;
+    float armMaxHealth = 60;
+    float legMaxHealth = 80;
 
     Dictionary<string, int> bodyParts = new Dictionary<string, int>(); 
     //ICollection<KeyValuePair<string, int>> bodyParts = new Dictionary<string, int>();
@@ -45,11 +59,17 @@ public class HealthManager : MonoBehaviour
     {
 
         healthText.text = "Health: " + health + "%";
-        if ( health > maxHealth ) health = maxHealth;
+        headHealthText.text = "Head Health: " + (( (float)bodyParts["headHealth"] / headMaxHealth ) * 100 ) + "%";
+        torsoHealthText.text = "Torso Health: " + (( (float)bodyParts["torsoHealth"] / torsoMaxHealth ) * 100 ) + "%";
+        leftArmHealthText.text = "Left Arm Health: " + (( (float)bodyParts["leftArmHealth"] / armMaxHealth ) * 100 ) + "%";
+        rightArmHealthText.text = "Right Arm Health: " + (( (float)bodyParts["rightArmHealth"] / armMaxHealth ) * 100 ) + "%";
+        leftLegHealthText.text = "Left Leg Health: " + (( (float)bodyParts["leftLegHealth"] / legMaxHealth ) * 100 ) + "%";
+        rightLegHealthText.text = "Right LegHealth: " + (( (float)bodyParts["rightLegHealth"] / legMaxHealth ) * 100 ) + "%";
+        
+        
 
         changeSpeed = 5 * Time.deltaTime;
 
-        HealthBarFiller();
         colourChanger();
         
 
@@ -60,39 +80,14 @@ public class HealthManager : MonoBehaviour
     {
         bodyParts.Add("headHealth" , 70 );
         bodyParts.Add("torsoHealth" , 100 );
-        bodyParts.Add("left_ArmHealth" , 60 );
-        bodyParts.Add("right_ArmHealth" , 60 );
-        bodyParts.Add("left_LegHealth" , 80 );
-        bodyParts.Add("right_LegHealth" , 80 );
+        bodyParts.Add("leftArmHealth" , 60 );
+        bodyParts.Add("rightArmHealth" , 60 );
+        bodyParts.Add("leftLegHealth" , 80 );
+        bodyParts.Add("rightLegHealth" , 80 );
 
     }
 
-    void HealthBarFiller()
-    {
 
-        //Debug.Log( bodyParts[1] );
-        headHealth.fillAmount = Mathf.Lerp( headHealth.fillAmount , bodyParts[bodyPart] / headMaxHealth , changeSpeed );
-        
-    }
-
-    static string determinePart(string value)
-    {
-        switch (value)
-        {
-            case "head":
-                return "chuck";
-            case "torso":
-                return "suck and fuck";
-            case "left_armHealth":
-            case "right_armHealth":
-                return "sneed";
-            case "left_legHealth":
-            case "right_legHealth":
-                return "seed and feed";
-            default:
-                return "city slicker";
-        }
-    }
 
     public void decreaseHealth( string inputs )
     {
@@ -102,31 +97,91 @@ public class HealthManager : MonoBehaviour
         int damage = int.Parse( temp );
         int ind = inputs.LastIndexOf( ':' );
         temp = inputs.Substring(ind + 1);
-        string bodyPart = temp;
+        bodyPart = temp;
 
-        Debug.Log(determinePart(bodyPart));
+        //Debug.Log(determinePart(bodyPart));
         
-        Debug.Log(bodyParts[bodyPart]);
+        //Debug.Log(bodyParts[bodyPart]);
         if ( bodyParts[bodyPart] > 0 )
             bodyParts[bodyPart] -= damage;
 
 
     }
     
-    public void increaseHealth( float increasedHealth )
+    public void increaseHealth( string inputs )
     {
 
-        if ( health < maxHealth )
-            health += increasedHealth; 
+        string temp = inputs.Substring( 0 , 3 );
+        int healing = int.Parse( temp );
+        int ind = inputs.LastIndexOf( ':' );
+        temp = inputs.Substring(ind + 1);
+        bodyPart = temp;
+        //Debug.Log(bodyPart);
+        switch (bodyPart)
+        {
+            case "headHealth":
+                if ( bodyParts[bodyPart] < headMaxHealth )
+                    bodyParts[bodyPart] += healing; 
+                    if ( bodyParts[bodyPart] > headMaxHealth )
+                        bodyParts[bodyPart] = (int)headMaxHealth;
+                    Debug.Log(bodyParts[bodyPart]);
+                    break;
+            case "torsoHealth":
+                if ( bodyParts[bodyPart] < torsoMaxHealth )
+                    bodyParts[bodyPart] += healing; 
+                    if ( bodyParts[bodyPart] > torsoMaxHealth )
+                        bodyParts[bodyPart] = (int)torsoMaxHealth;
+                    break;
+            case "leftArmHealth":
+            case "rightArmHealth":
+                if ( bodyParts[bodyPart] < armMaxHealth )
+                    bodyParts[bodyPart] += healing; 
+                    if ( bodyParts[bodyPart] > armMaxHealth )
+                        bodyParts[bodyPart] = (int)armMaxHealth;
+                    break;
+            case "leftLegHealth":
+            case "rightLegHealth":
+                if ( bodyParts[bodyPart] < legMaxHealth )
+                    bodyParts[bodyPart] += healing; 
+                    if ( bodyParts[bodyPart] > legMaxHealth )
+                        bodyParts[bodyPart] = (int)legMaxHealth;
+                    break;
+        }
+
+
 
     }
 
     void colourChanger()
     {
+        switch (bodyPart)
+        {
+            case "headHealth":
+                healthColourHead = Color.Lerp( Color.red , Color.green , ( bodyParts[bodyPart] / headMaxHealth ));
+                break;
+            case "torsoHealth":
+                healthColourTorso = Color.Lerp( Color.red , Color.green , ( bodyParts[bodyPart] / torsoMaxHealth ));
+                break;
+            case "leftArmHealth":
+                healthColourLeftArm = Color.Lerp( Color.red , Color.green , ( bodyParts[bodyPart] / armMaxHealth ));
+                break;
+            case "rightArmHealth":
+                healthColourRightArm = Color.Lerp( Color.red , Color.green , ( bodyParts[bodyPart] / armMaxHealth ));
+                break;
+            case "leftLegHealth":
+                healthColourLeftLeg = Color.Lerp( Color.red , Color.green , ( bodyParts[bodyPart] / legMaxHealth ));
+                break;
+            case "rightLegHealth":
+                healthColourRightLeg = Color.Lerp( Color.red , Color.green , ( bodyParts[bodyPart] / legMaxHealth ));
+                break;
+        }
 
-        Color healthColour = Color.Lerp( Color.red , Color.green , ( bodyParts[bodyPart] / headMaxHealth ));
-
-        headHealth.color = healthColour;
+        headHealth.color = healthColourHead;
+        torsoHealth.color = healthColourTorso;
+        leftArmHealth.color = healthColourLeftArm;
+        rightArmHealth.color = healthColourRightArm;
+        leftLegHealth.color = healthColourLeftLeg;
+        rightLegHealth.color = healthColourRightLeg;
 
     }
 }
