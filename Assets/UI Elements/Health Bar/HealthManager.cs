@@ -7,6 +7,7 @@ using System.Linq;
 
 public class HealthManager : MonoBehaviour
 {
+    // definitions
     public Text healthText;
     public Text headHealthText;
     public Text torsoHealthText;
@@ -29,9 +30,7 @@ public class HealthManager : MonoBehaviour
     public Color healthColourLeftLeg = Color.green;
     public Color healthColourRightLeg = Color.green;
 
-    
     float health , maxHealth = 100;
-
 
     string bodyPart = "headHealth";
 
@@ -41,11 +40,10 @@ public class HealthManager : MonoBehaviour
     float legMaxHealth = 80;
 
     Dictionary<string, int> bodyParts = new Dictionary<string, int>(); 
-    //ICollection<KeyValuePair<string, int>> bodyParts = new Dictionary<string, int>();
     
-
     float changeSpeed;
     
+
     private void Start()
     {
 
@@ -57,7 +55,7 @@ public class HealthManager : MonoBehaviour
 
     private void Update()
     {
-
+        // establish health percentage texts
         healthText.text = "Health: " + health + "%";
         headHealthText.text = "Head Health: " + (( (float)bodyParts["headHealth"] / headMaxHealth ) * 100 ) + "%";
         torsoHealthText.text = "Torso Health: " + (( (float)bodyParts["torsoHealth"] / torsoMaxHealth ) * 100 ) + "%";
@@ -66,8 +64,7 @@ public class HealthManager : MonoBehaviour
         leftLegHealthText.text = "Left Leg Health: " + (( (float)bodyParts["leftLegHealth"] / legMaxHealth ) * 100 ) + "%";
         rightLegHealthText.text = "Right LegHealth: " + (( (float)bodyParts["rightLegHealth"] / legMaxHealth ) * 100 ) + "%";
         
-        
-
+        // not being used, but in future i may make slow transition between colours
         changeSpeed = 5 * Time.deltaTime;
 
         colourChanger();
@@ -78,6 +75,7 @@ public class HealthManager : MonoBehaviour
 
     void defineThings()
     {
+        // define body parts and healths
         bodyParts.Add("headHealth" , 70 );
         bodyParts.Add("torsoHealth" , 100 );
         bodyParts.Add("leftArmHealth" , 60 );
