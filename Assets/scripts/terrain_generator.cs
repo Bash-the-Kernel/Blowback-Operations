@@ -91,7 +91,7 @@ public class terrain_generator : MonoBehaviour
                         Instantiate(boulders[Random.Range(0, 3)], position, Quaternion.Euler(90, 0, Random.Range(0f, 90f)), nature_stuff);
                     }
                 }
-                if (Random.Range(0f, 100f) <= 0.1f)
+                if (Random.Range(0f, 100f) <= 0.01f)
                 {
                     if (x > 40/width_convert && y > 40/height_convert && x < t_data.alphamapWidth - 40/width_convert  && y < t_data.alphamapHeight - 40/height_convert)
                     {

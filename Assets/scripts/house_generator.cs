@@ -15,6 +15,8 @@ public class house_generator : MonoBehaviour
     public Transform nature_parent;
     private float width;
     private float length;
+    public float player_girth = 7;
+    public float house_rot;
 
     void Awake()
     {
@@ -24,14 +26,17 @@ public class house_generator : MonoBehaviour
     {
         player = GameObject.Find("player").transform;
 
+        house_rot = 90 * Random.Range(0, 3);
+        Rotate_house(house_rot);
+
     }
 
     void construct_house()
     {
-        
+
         //each object i make is a wall for a house
-        length = Random.Range(30f, 80f);
-        width = Random.Range(30f, 80f);
+        length = Random.Range(25f, 50f);
+        width = Random.Range(25f, 50f);
         float l_f_width = Random.Range(0f, width - 12);
 
         Quaternion norm_rot_x = Quaternion.Euler(90, 0, 0);
@@ -58,6 +63,19 @@ public class house_generator : MonoBehaviour
 
         roof_ = Instantiate(roof, transform.position, norm_rot_x, transform);
         roof_.transform.localScale = new Vector3(width/6f, length/6f, 0);
+
+        if (house_rot == 90 || house_rot == 270)
+        {
+            float temp_width = width;
+            width = length;
+            length = temp_width;
+        }
+    }
+
+    public void Rotate_house(float angle)
+    {
+        transform.rotation = Quaternion.Euler(0, angle, 0);
+        //print(transform.rotation.eulerAngles.y);
     }
 
     public void Remove_shit_from_house()
@@ -67,7 +85,7 @@ public class house_generator : MonoBehaviour
         float x = transform.position.x;
         float z = transform.position.z;
         //print(width);
-        print(transform.parent.childCount +"bruh");
+        //print(transform.parent.childCount +"bruh");
         List<Transform> destroy_list = new List<Transform>();
         foreach (Transform child_house in transform.parent)
         {
@@ -75,12 +93,16 @@ public class house_generator : MonoBehaviour
             float c_h_z = child_house.position.z;
             float c_h_width = child_house.GetComponent<house_generator>().width;
             float c_h_length = child_house.GetComponent<house_generator>().length;
-            if (z + length / 2 + c_h_length / 2 >= c_h_z && z <= c_h_z && ((x - width / 2 - c_h_width / 2 <= c_h_x && x >= c_h_x) || (x + width / 2 + c_h_width / 2 >= c_h_x && x <= c_h_x)))
+            if (z + length / 2 + c_h_length / 2 >= c_h_z - player_girth && z <= c_h_z)
             {
-                if (transform != child_house)
+                if ((x - width / 2 - c_h_width / 2 <= c_h_x + player_girth && x >= c_h_x) || (x + width / 2 + c_h_width / 2 >= c_h_x - player_girth && x <= c_h_x))
                 {
-                    destroy_list.Add(child_house);
-                    Destroy(child_house.gameObject);
+                    if (transform != child_house)
+                    {
+                        destroy_list.Add(child_house);
+                        Destroy(child_house.gameObject);
+                    }
+
                 }
             }
 
@@ -90,7 +112,6 @@ public class house_generator : MonoBehaviour
         {
             dead_house.parent = null;
         }
-        print(transform.parent.childCount+ "FUCK");
         foreach (Transform child in nature_parent)
         {
             float c_x = child.position.x;
