@@ -20,14 +20,14 @@ public class house_generator : MonoBehaviour
 
     void Awake()
     {
+        house_rot = 90 * Random.Range(0, 3);
         construct_house();
+        Rotate_house(house_rot);
     }
     void Start()
     {
         player = GameObject.Find("player").transform;
 
-        house_rot = 90 * Random.Range(0, 3);
-        Rotate_house(house_rot);
 
     }
 
@@ -63,12 +63,13 @@ public class house_generator : MonoBehaviour
 
         roof_ = Instantiate(roof, transform.position, norm_rot_x, transform);
         roof_.transform.localScale = new Vector3(width/6f, length/6f, 0);
-
+        print(house_rot);
         if (house_rot == 90 || house_rot == 270)
         {
             float temp_width = width;
             width = length;
             length = temp_width;
+            print(width + "FML" + length);
         }
     }
 
@@ -137,6 +138,7 @@ public class house_generator : MonoBehaviour
         {
             //print("go get fucked you bastard");
             roof_.SetActive(false);
+            print(width+"BRUH"+length);
         }
         else
         {
