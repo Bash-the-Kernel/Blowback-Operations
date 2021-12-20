@@ -10,7 +10,7 @@ public class bullet_controller_ : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
-        print("bruh wtf");
+        //print("bruh wtf");
         rb.AddForce(transform.right * bullet_speed);
         Physics.IgnoreCollision(col, transform.parent.GetChild(0).GetComponent<Collider>(), true);
 
