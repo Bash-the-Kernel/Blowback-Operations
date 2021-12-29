@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 171619686571536245}
   m_Layer: 0
   m_Name: boulder4_pfb
-  m_TagString: Untagged
+  m_TagString: obstruction
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
