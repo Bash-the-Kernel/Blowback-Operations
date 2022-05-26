@@ -67,8 +67,13 @@ public class terrain_generator : MonoBehaviour
         float[,,] map = new float[t_data.alphamapWidth, t_data.alphamapHeight, 8];
         //print(t_data.alphamapHeight);
         //print(t_data.alphamapWidth);
-        float height_convert = 200.0f / t_data.alphamapHeight;
-        float width_convert = 300.0f / t_data.alphamapWidth;
+        float height_convert = 400.0f / t_data.alphamapHeight;
+        float width_convert = 600.0f / t_data.alphamapWidth;
+
+        float boundry_min_y = t_data.alphamapHeight / 4;
+        float boundry_min_x = t_data.alphamapWidth / 4;
+        float boundry_max_y = t_data.alphamapHeight - boundry_min_y;
+        float boundry_max_x = t_data.alphamapWidth - boundry_min_x;
         for (int y = 0; y < t_data.alphamapHeight; y++)
         {
             for (int x = 0; x < t_data.alphamapWidth; x++)
@@ -85,17 +90,17 @@ public class terrain_generator : MonoBehaviour
                 }
                 if (Random.Range(0f, 100f) <= 0.002f)
                 {
-                    if(x > 10/width_convert && y > 10/height_convert  && x <  t_data.alphamapWidth - 10/width_convert && y < t_data.alphamapHeight - 10/height_convert)
+                    if(x > 10/width_convert && y > 10/height_convert && x < t_data.alphamapWidth - 10/width_convert && y < t_data.alphamapHeight - 10/height_convert)
                     {
                         Vector3 position = new Vector3(x * width_convert, 20f, y * height_convert);
                         Instantiate(boulders[Random.Range(0, 3)], position, Quaternion.Euler(90, 0, Random.Range(0f, 90f)), nature_stuff);
                     }
                 }
-                if (Random.Range(0f, 100f) <= 0.01f)
+                if (Random.Range(0f, 100f) <= 0.05f)
                 {
-                    if (x > 40/width_convert && y > 40/height_convert && x < t_data.alphamapWidth - 40/width_convert  && y < t_data.alphamapHeight - 40/height_convert)
+                    if (x > 40/width_convert + boundry_min_x && y > 40/height_convert + boundry_min_y && x < boundry_max_x - 40/width_convert  && y < boundry_max_y - 40/height_convert)
                     {
-                        Vector3 position = new Vector3(x * width_convert, 0, y * height_convert);
+                        Vector3 position = new Vector3(x * width_convert, 1, y * height_convert);
                         Instantiate(house, position, Quaternion.identity, house_parent);
                     }
                 }

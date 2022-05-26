@@ -22,23 +22,25 @@ public class player_control : MonoBehaviour
 
     void FixedUpdate()
     {
-        Move();
         faceMouse();
+        Move();
+        rb.isKinematic = false;
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        rb.isKinematic = true;
+    }
+    private void OnCollisionExit(Collision collision)
+    {
+    }
 
     void faceMouse()
     {
-        //makes the player face the mouse position
         Vector3 mousePosition = Input.mousePosition;
         mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
-        Vector3 direction = new Vector3(mousePosition.x - transform.position.x, mousePosition.z - transform.position.z, 0);
-        //print(mousePosition.x - transform.position.x);
-        //print(mousePosition.y);
-        //print(mousePosition.z - transform.position.z);
-        //print("COKC");
+        Vector3 direction = new Vector3(mousePosition.x - transform.position.x, mousePosition.z - transform.position.z,0);
         transform.right = direction;
-        //print(transform.rotation.eulerAngles.z);
         transform.rotation = Quaternion.Euler(90, 0, transform.rotation.eulerAngles.z);
     }
 
@@ -69,7 +71,7 @@ public class player_control : MonoBehaviour
         GameObject bullet_parent = GameObject.Find("player_parent");
 
         bullet_pos.y = 1;
-        print(transform.rotation.eulerAngles.x);
+        //print(transform.rotation.eulerAngles.x);
         bullet_rot.eulerAngles.Set(90, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
         Instantiate(bullet, bullet_pos, bullet_rot, bullet_parent.transform);
     }
@@ -78,6 +80,7 @@ public class player_control : MonoBehaviour
     {
         //animate movement and then move
         rb.velocity = new Vector3(moveDirection.x * moveSpeed, 0, moveDirection.z * moveSpeed);
+
     }
 
 }

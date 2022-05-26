@@ -26,7 +26,7 @@ public class bullet_controller_ : MonoBehaviour
 
     void Start()
     {
-       StartCoroutine(destroy_after(10.0f));
+       StartCoroutine(destroy_after(5.0f));
     }
 
     // Update is called once per frame
