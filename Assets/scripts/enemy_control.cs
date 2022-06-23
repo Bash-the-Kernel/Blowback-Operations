@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class enemy_control : MonoBehaviour
 {
+    public bool is_alive = true;
     public GameObject bullet;
+    public GameObject muzzle_flash;
     public float rotSpeed;
     public float moveSpeed;
     public GameObject player;
@@ -13,12 +15,22 @@ public class enemy_control : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        rb = GetComponent<Rigidbody>();
         player = GameObject.Find("player");
     }
     // Update is called once per frame
     void FixedUpdate()
     {
+        death_check();
         action_control();
+    }
+
+    void death_check()
+    {
+        if (!is_alive)
+        {
+            Destroy(gameObject);
+        }
     }
 
     void action_control()
@@ -114,13 +126,15 @@ public class enemy_control : MonoBehaviour
         //print("LIGMABALLS");
         yield return new WaitForSeconds(time);
         Quaternion bullet_rot = transform.rotation;
-        Vector3 bullet_pos = GameObject.Find("enemy_firepoint").transform.position;
+        Vector3 bullet_pos = transform.Find("enemy_firepoint").transform.position;
+        Vector3 flash_pos = transform.Find("enemy_flashpoint").transform.position;
         GameObject bullet_parent = GameObject.Find("enemy_parent");
 
-        bullet_pos.y = 1;
+        bullet_pos.y = 3;
         //print(transform.rotation.eulerAngles.x);
         //bullet_rot.eulerAngles.Set(90, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-        Instantiate(bullet, bullet_pos, bullet_rot, bullet_parent.transform);
+        Instantiate(bullet, bullet_pos, bullet_rot, transform);
+        Instantiate(muzzle_flash, flash_pos, bullet_rot, transform);
 
     }
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class player_control : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class player_control : MonoBehaviour
     public Rigidbody rb;
     public float moveSpeed;
     public GameObject bullet;
+    public GameObject muzzle_flash;
+    public bool is_alive = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,8 +19,9 @@ public class player_control : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        see_under_rooves();
         ProcessInputs();
+        death_check();
     }
 
     void FixedUpdate()
@@ -25,6 +29,23 @@ public class player_control : MonoBehaviour
         faceMouse();
         Move();
         rb.isKinematic = false;
+    }
+
+    void see_under_rooves()
+    {
+        for(int i = -60;i < 60; i++)
+        {
+            Vector3 direction =  Quaternion.Euler(0, i, 0) * transform.right * 100;
+            Debug.DrawRay(transform.position, direction, Color.green);
+        }
+    }
+
+    void death_check()
+    {
+        if (!is_alive)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -68,12 +89,14 @@ public class player_control : MonoBehaviour
     {
         Quaternion bullet_rot = transform.rotation;
         Vector3 bullet_pos = GameObject.Find("firepoint").transform.position;
+        Vector3 flash_pos = GameObject.Find("flashpoint").transform.position;
         GameObject bullet_parent = GameObject.Find("player_parent");
 
-        bullet_pos.y = 1;
+        bullet_pos.y = 3;
         //print(transform.rotation.eulerAngles.x);
         bullet_rot.eulerAngles.Set(90, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-        Instantiate(bullet, bullet_pos, bullet_rot, bullet_parent.transform);
+        Instantiate(bullet, bullet_pos, bullet_rot, transform);
+        Instantiate(muzzle_flash, flash_pos, bullet_rot, transform);
     }
 
     void Move()

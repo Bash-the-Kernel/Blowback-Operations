@@ -44,25 +44,26 @@ public class house_generator : MonoBehaviour
 
 
         GameObject back_wall = Instantiate(wall, new Vector3(0, 1, 0.5f * (length - 1)) + transform.position, norm_rot_x, transform);
-        back_wall.transform.localScale = new Vector3(width, 1, 5);
+        back_wall.transform.localScale = new Vector3(width, 1, 9);
 
         GameObject L_side_wall = Instantiate(wall, new Vector3(-0.5f * (width - 1) , 1, 0) + transform.position, norm_rot_z, transform);
-        L_side_wall.transform.localScale = new Vector3((length - 2), 1, 5);
+        L_side_wall.transform.localScale = new Vector3((length - 2), 1, 9);
 
         GameObject R_side_wall = Instantiate(wall, new Vector3(0.5f * (width - 1), 1, 0) + transform.position, norm_rot_z, transform);
-        R_side_wall.transform.localScale = new Vector3((length - 2), 1, 5);
+        R_side_wall.transform.localScale = new Vector3((length - 2), 1, 9);
 
         GameObject L_front_wall = Instantiate(wall, new Vector3(-0.5f * (width - l_f_width), 1, -0.5f * (length - 1)) + transform.position, norm_rot_x, transform);
-        L_front_wall.transform.localScale = new Vector3(l_f_width, 1, 5);
+        L_front_wall.transform.localScale = new Vector3(l_f_width, 1, 9);
 
         GameObject R_front_wall = Instantiate(wall, new Vector3(0.5f * (l_f_width + 10), 1, -0.5f * (length - 1)) + transform.position, norm_rot_x, transform);
-        R_front_wall.transform.localScale = new Vector3((width - l_f_width - 10), 1, 5);
+        R_front_wall.transform.localScale = new Vector3((width - l_f_width - 10), 1, 9);
 
         floor_ = Instantiate(floor, transform.position, norm_rot_x, transform);
         floor_.transform.localScale = new Vector3(width/19.7f, length/19.7f, 0);
-
-        roof_ = Instantiate(roof, transform.position, norm_rot_x, transform);
-        roof_.transform.localScale = new Vector3(width/6f, length/6f, 0);
+        Vector3 roof_pos = transform.position;
+        roof_pos.y += 5.1f;
+        roof_ = Instantiate(roof, roof_pos, norm_rot_x, transform);
+        roof_.transform.localScale = new Vector3(width, length, 1);
         //print(house_rot);
         if (house_rot == 90 || house_rot == 270)
         {
@@ -85,8 +86,6 @@ public class house_generator : MonoBehaviour
         nature_parent = GameObject.Find("nature_stuff").transform;
         float x = transform.position.x;
         float z = transform.position.z;
-        //print(width);
-        //print(transform.parent.childCount +"bruh");
         List<Transform> destroy_list = new List<Transform>();
         foreach (Transform child_house in transform.parent)
         {

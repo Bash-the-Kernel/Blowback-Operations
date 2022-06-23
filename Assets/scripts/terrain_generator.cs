@@ -5,7 +5,7 @@ using UnityEngine;
 public class terrain_generator : MonoBehaviour
 {
     public Terrain t;
-
+    public GameObject enemy;
     public GameObject[] pebbles;
     public GameObject[] boulders;
     public GameObject[] trees;
@@ -14,6 +14,7 @@ public class terrain_generator : MonoBehaviour
 
     private TerrainData t_data;
     public Transform house_parent;
+    public Transform enemy_parent;
     public Transform nature_stuff;
 
     private void Awake()
@@ -23,6 +24,37 @@ public class terrain_generator : MonoBehaviour
         EditTerrain();
         foreach(Transform child in house_parent)
         {
+            float random_num = Random.Range(0f, 100f);
+            Vector3 enemy_pos = child.position;
+            enemy_pos.y += 5;
+            Vector3 saved_enemy_pos = enemy_pos;
+            if(random_num > 95)
+            {
+                enemy_pos.x += 8;
+                enemy_pos.z += 8;
+                Instantiate(enemy, enemy_pos, Quaternion.Euler(90f,0f,0f), enemy_parent);
+                enemy_pos = saved_enemy_pos;
+            }
+            if (random_num > 80)
+            {
+                enemy_pos.x += 8;
+                enemy_pos.z -= 8;
+                Instantiate(enemy, enemy_pos, Quaternion.Euler(90f, 0f, 0f), enemy_parent);
+                enemy_pos = saved_enemy_pos;
+            }
+            if (random_num > 50)
+            {
+                enemy_pos.x -= 8;
+                enemy_pos.z -= 8;
+                Instantiate(enemy, enemy_pos, Quaternion.Euler(90f,0f,0f), enemy_parent);
+                enemy_pos = saved_enemy_pos;
+            }
+            if (random_num > 10)
+            {
+                enemy_pos.x -= 8;
+                enemy_pos.z += 8;
+                Instantiate(enemy, enemy_pos, Quaternion.Euler(90f,0f,0f), enemy_parent);
+            }
             child.GetComponent<house_generator>().Remove_shit_from_house();
         }
     }
