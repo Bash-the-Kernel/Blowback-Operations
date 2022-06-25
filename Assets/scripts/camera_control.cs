@@ -12,7 +12,7 @@ public class camera_control : MonoBehaviour
     void Update()
     {
         Vector3 raisedPlayerPos = playerObject.position;
-        raisedPlayerPos.y = 10;
+        raisedPlayerPos.y = 100;
         transform.position = raisedPlayerPos;
 
 

@@ -7,6 +7,9 @@ public class player_control : MonoBehaviour
 {
     private Vector3 moveDirection;
     public Rigidbody rb;
+    public GameObject doorway;
+    public GameObject roof_remover;
+    public List<GameObject> roof_removers;
     public float moveSpeed;
     public GameObject bullet;
     public GameObject muzzle_flash;
@@ -19,6 +22,10 @@ public class player_control : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        foreach (GameObject go in roof_removers)
+        {
+            Destroy(go);
+        }
         see_under_rooves();
         ProcessInputs();
         death_check();
@@ -33,10 +40,32 @@ public class player_control : MonoBehaviour
 
     void see_under_rooves()
     {
-        for(int i = -60;i < 60; i++)
+        for(int i = -240;i < 240; i++)
         {
-            Vector3 direction =  Quaternion.Euler(0, i, 0) * transform.right * 100;
-            Debug.DrawRay(transform.position, direction, Color.green);
+            int layerMask = 1 << 6;
+            Vector3 direction =  Quaternion.Euler(0, i/4, 0) * transform.right * 200;
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, direction, out hit, 100, ~layerMask))
+            {
+                if(hit.collider.tag == doorway.tag)
+                {
+                    
+                    Debug.DrawRay(transform.position, direction, Color.green);
+                    Vector3 position = transform.position;
+                    Quaternion rotation = transform.rotation;
+                    rotation.z += i/4;
+                    position.y = 11f;
+                    position += direction/2;
+                    GameObject r_r_slide = Instantiate(roof_remover, position, transform.rotation);
+                    r_r_slide.transform.localScale = new Vector3(200,2,1);
+                    r_r_slide.transform.Rotate(0,0,-i/4);
+                    roof_removers.Add(r_r_slide);
+                }
+                else
+                {
+                    Debug.DrawRay(transform.position, direction, Color.yellow);
+                }
+            }
         }
     }
 

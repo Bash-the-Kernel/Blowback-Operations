@@ -117,7 +117,7 @@ public class terrain_generator : MonoBehaviour
                 }
                 if (Random.Range(0f, 100f) <= 11 && x % 10 == 0 && y % 10 == 0)
                 {
-                    Vector3 position = new Vector3(x * width_convert, 0.1f, y * height_convert);
+                    Vector3 position = new Vector3(x * width_convert, 20, y * height_convert);
                     Instantiate(trees[Random.Range(0, 8)], position, Quaternion.Euler(90, 0, Random.Range(0f, 90f)), nature_stuff);
                 }
                 if (Random.Range(0f, 100f) <= 0.002f)
@@ -125,7 +125,7 @@ public class terrain_generator : MonoBehaviour
                     if(x > 10/width_convert && y > 10/height_convert && x < t_data.alphamapWidth - 10/width_convert && y < t_data.alphamapHeight - 10/height_convert)
                     {
                         Vector3 position = new Vector3(x * width_convert, 20f, y * height_convert);
-                        Instantiate(boulders[Random.Range(0, 3)], position, Quaternion.Euler(90, 0, Random.Range(0f, 90f)), nature_stuff);
+                        Instantiate(boulders[Random.Range(0, 4)], position, Quaternion.Euler(90, 0, Random.Range(0f, 90f)), nature_stuff);
                     }
                 }
                 if (Random.Range(0f, 100f) <= 0.05f)

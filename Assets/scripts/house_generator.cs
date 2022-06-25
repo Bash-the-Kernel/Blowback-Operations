@@ -7,6 +7,7 @@ public class house_generator : MonoBehaviour
     // Start is called before the first frame update
     public Transform parent;
     public GameObject wall;
+    public GameObject doorway;
     public GameObject floor;
     public GameObject roof;
     private GameObject floor_;
@@ -44,24 +45,29 @@ public class house_generator : MonoBehaviour
 
 
         GameObject back_wall = Instantiate(wall, new Vector3(0, 1, 0.5f * (length - 1)) + transform.position, norm_rot_x, transform);
-        back_wall.transform.localScale = new Vector3(width, 1, 9);
+        back_wall.transform.localScale = new Vector3(width, 1, 18);
 
         GameObject L_side_wall = Instantiate(wall, new Vector3(-0.5f * (width - 1) , 1, 0) + transform.position, norm_rot_z, transform);
-        L_side_wall.transform.localScale = new Vector3((length - 2), 1, 9);
+        L_side_wall.transform.localScale = new Vector3((length - 2), 1, 18);
 
         GameObject R_side_wall = Instantiate(wall, new Vector3(0.5f * (width - 1), 1, 0) + transform.position, norm_rot_z, transform);
-        R_side_wall.transform.localScale = new Vector3((length - 2), 1, 9);
+        R_side_wall.transform.localScale = new Vector3((length - 2), 1, 18);
 
         GameObject L_front_wall = Instantiate(wall, new Vector3(-0.5f * (width - l_f_width), 1, -0.5f * (length - 1)) + transform.position, norm_rot_x, transform);
-        L_front_wall.transform.localScale = new Vector3(l_f_width, 1, 9);
+        L_front_wall.transform.localScale = new Vector3(l_f_width, 1, 18);
 
         GameObject R_front_wall = Instantiate(wall, new Vector3(0.5f * (l_f_width + 10), 1, -0.5f * (length - 1)) + transform.position, norm_rot_x, transform);
-        R_front_wall.transform.localScale = new Vector3((width - l_f_width - 10), 1, 9);
+        R_front_wall.transform.localScale = new Vector3((width - l_f_width - 10), 1, 18);
 
-        floor_ = Instantiate(floor, transform.position, norm_rot_x, transform);
-        floor_.transform.localScale = new Vector3(width/19.7f, length/19.7f, 0);
+        GameObject door_way = Instantiate(doorway, new Vector3(-0.5f * width + l_f_width + 5, 1, -0.5f * (length - 1)) + transform.position, norm_rot_x, transform);
+        door_way.transform.localScale = new Vector3(10, 1, 18);
+
+        Vector3 floor_pos = transform.position;
+        floor_pos.y -= 0.9f;
+        floor_ = Instantiate(floor, floor_pos, norm_rot_x, transform);
+        floor_.transform.localScale = new Vector3(width, length, 1);
         Vector3 roof_pos = transform.position;
-        roof_pos.y += 5.1f;
+        roof_pos.y += 9.9f;
         roof_ = Instantiate(roof, roof_pos, norm_rot_x, transform);
         roof_.transform.localScale = new Vector3(width, length, 1);
         //print(house_rot);
