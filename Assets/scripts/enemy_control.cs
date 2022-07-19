@@ -60,13 +60,14 @@ public class enemy_control : MonoBehaviour
         Quaternion target_rot = Quaternion.AngleAxis(angle, Vector3.forward);
 
         //these are masks that will be used such that the ray that will be cast only hits the player and not other things like walls and other enemies
+        int layerMask = 1 << 8;/*
         int mask = 1 << LayerMask.NameToLayer("player");
-        mask |= 1 << LayerMask.NameToLayer("Default");
+        mask |= 1 << LayerMask.NameToLayer("Default");*/
 
         Vector3 startpos = transform.position;
         startpos.y = 1;
         RaycastHit hit;
-        if (Physics.Raycast(startpos, direction, out hit, Mathf.Infinity))
+        if (Physics.Raycast(startpos, direction, out hit, Mathf.Infinity, ~layerMask))
         {
 
             Debug.DrawRay(startpos, direction * hit.distance, Color.yellow);

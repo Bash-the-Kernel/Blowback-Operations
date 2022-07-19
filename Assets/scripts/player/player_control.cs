@@ -8,6 +8,7 @@ public class player_control : MonoBehaviour
     private Vector3 moveDirection;
     public Rigidbody rb;
     public GameObject doorway;
+    public GameObject wall;
     public GameObject roof_remover;
     public List<GameObject> roof_removers;
     public float moveSpeed;
@@ -40,26 +41,44 @@ public class player_control : MonoBehaviour
 
     void see_under_rooves()
     {
-        for(int i = -240;i < 240; i++)
+        for(int i = -60;i < 60; i++)
         {
             int layerMask = 1 << 6;
-            Vector3 direction =  Quaternion.Euler(0, i/4, 0) * transform.right * 200;
+            Vector3 direction =  Quaternion.Euler(0, i, 0) * transform.right;
             RaycastHit hit;
+            float distance = 0;
             if (Physics.Raycast(transform.position, direction, out hit, 100, ~layerMask))
             {
                 if(hit.collider.tag == doorway.tag)
                 {
-                    
+                    RaycastHit hit_2;
+                    layerMask = 1 << 7;
+
+                    if (Physics.Raycast(hit.transform.position, direction, out hit_2, 100, ~layerMask))
+                    {
+                        if(hit_2.collider.tag == wall.tag)
+                        {
+                            distance = hit_2.distance + hit.distance;
+
+                        }
+                    }
                     Debug.DrawRay(transform.position, direction, Color.green);
-                    Vector3 position = transform.position;
+                    Vector3 position = transform.position + direction * distance/2;
                     Quaternion rotation = transform.rotation;
-                    rotation.z += i/4;
+                    rotation.z += i;
                     position.y = 11f;
-                    position += direction/2;
                     GameObject r_r_slide = Instantiate(roof_remover, position, transform.rotation);
-                    r_r_slide.transform.localScale = new Vector3(200,2,1);
-                    r_r_slide.transform.Rotate(0,0,-i/4);
+                    r_r_slide.transform.localScale = new Vector3(distance,2,1);
+                    r_r_slide.transform.Rotate(0,0,-i);
                     roof_removers.Add(r_r_slide);
+                    if (hit.collider.tag == wall.tag)
+                    {
+                        print("yes");
+                    }
+                    if (hit.collider.tag != wall.tag)
+                    {
+                        print("no");
+                    }
                 }
                 else
                 {
