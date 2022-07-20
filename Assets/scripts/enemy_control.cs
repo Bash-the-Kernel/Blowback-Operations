@@ -188,7 +188,8 @@ public class enemy_control : MonoBehaviour
 
     void Roaming_mode()
     {
-        //StartCoroutine(Turn(0.1f, 90f, 2f));
+        //StartCoroutine(Turn(0.1f, 180f, 0.5f));
+        
         float wait_time = 3f;
         state = "roaming";
         if (is_object_close(10f) || is_turning)
@@ -203,7 +204,7 @@ public class enemy_control : MonoBehaviour
             {
                 is_turning_right = true;
                 print("i swear to god");
-                StartCoroutine(Turn(0.1f, -90f, 2f));
+                //StartCoroutine(Turn(0.1f, -90f, 2f));
             }
             else
             {
@@ -236,21 +237,20 @@ public class enemy_control : MonoBehaviour
     }
     bool is_right_closer()
     {
+        int layerMask = 1 << 7;
         RaycastHit hit;
         RaycastHit hit_2;
-        Transform right = transform;
-        right.rotation = Quaternion.Euler(90f, 0f, transform.rotation.z + 90);
-        Transform left = transform;
-        left.rotation = Quaternion.Euler(90f, 0f, transform.rotation.z - 90);
+        Vector3 right = Quaternion.Euler(0, 90, 0) * transform.right;
+        Vector3 left = Quaternion.Euler(0, 90, 0) * transform.right;
 
 
 
-        if (Physics.Raycast(transform.position, right.right, out hit, Mathf.Infinity))
+        if (Physics.Raycast(transform.position, right, out hit, Mathf.Infinity, ~layerMask))
         {
-            if (Physics.Raycast(transform.position, left.right, out hit_2, Mathf.Infinity))
+            if (Physics.Raycast(transform.position, left, out hit_2, Mathf.Infinity, ~layerMask))
             {
-                Debug.DrawRay(transform.position, right.right * hit.distance, Color.yellow);
-                Debug.DrawRay(transform.position, left.right * hit_2.distance, Color.yellow);
+                Debug.DrawRay(transform.position, right * hit.distance, Color.red);
+                Debug.DrawRay(transform.position, left * hit_2.distance, Color.red);
                 if (hit.distance < hit_2.distance) return true;
                 else return false;
             }
