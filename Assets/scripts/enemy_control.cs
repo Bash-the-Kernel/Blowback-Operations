@@ -5,6 +5,7 @@ using UnityEngine;
 public class enemy_control : MonoBehaviour
 {
     public bool is_alive = true;
+    string state;
     public GameObject bullet;
     public GameObject muzzle_flash;
     public float rotSpeed;
@@ -12,6 +13,9 @@ public class enemy_control : MonoBehaviour
     public GameObject player;
     public float time = 0f;
     public Rigidbody rb;
+    public bool is_turning = false;
+    public bool is_turning_right = false;
+    public float hold_time;
     // Start is called before the first frame update
     void Start()
     {
@@ -37,12 +41,17 @@ public class enemy_control : MonoBehaviour
     {
         if (can_See(player))
         {
+            state = "attacking";
             StartCoroutine(RotateTowards(0.2f, player.transform.position));
             if (Time.time - time >= 0.3f)
             {
                 StartCoroutine(shoot(0.1f));
                 time = Time.time;
             }
+        }
+        else
+        {
+            Roaming_mode();
         }
     }
 
@@ -96,7 +105,7 @@ public class enemy_control : MonoBehaviour
     {
         Vector3 position;
         float time_est = (Vector3.Distance(target, transform.position) * player.GetComponent<player_control>().moveSpeed * 1.28f / bullet.GetComponent<bullet_controller_>().bullet_speed);
-        print(time_est);
+        //print(time_est);
         if (target_rb.velocity.magnitude > 0)
         {
             position = target + target_rb.velocity * time_est;
@@ -106,9 +115,9 @@ public class enemy_control : MonoBehaviour
         {
             position = target;
         }
-        print(target.x + " " + target.y + " " + target.z);
-        print(" ");
-        print(position.x + " " + position.y + " " + position.z);
+        //print(target.x + " " + target.y + " " + target.z);
+        //print(" ");
+        //print(position.x + " " + position.y + " " + position.z);
         return position;
 
 
@@ -117,10 +126,23 @@ public class enemy_control : MonoBehaviour
     IEnumerator MoveForward(float time)
     {
         yield return new WaitForSeconds(time);
-        transform.position += transform.right * moveSpeed * Time.deltaTime;
+        //transform.position += transform.right * moveSpeed * Time.deltaTime;
+        rb.velocity = new Vector3(transform.right.x * moveSpeed, 0, transform.right.z * moveSpeed);
     }
-    
+    IEnumerator Stop(float time)
+    {
+        yield return new WaitForSeconds(time);
+        //transform.position += transform.right * moveSpeed * Time.deltaTime;
+        rb.velocity = new Vector3(0, 0, 0);
+    }
 
+    IEnumerator Turn(float time, float degrees, float turnspeed)
+    {
+        yield return new WaitForSeconds(time);
+        Quaternion target_rot = Quaternion.Euler(90f, 0f, transform.rotation.z + degrees);
+        transform.rotation = Quaternion.Slerp(transform.rotation, target_rot, turnspeed * Time.deltaTime);
+
+    }
 
     IEnumerator shoot(float time)
     {
@@ -162,6 +184,79 @@ public class enemy_control : MonoBehaviour
 
         }
 
+    }
+
+    void Roaming_mode()
+    {
+        //StartCoroutine(Turn(0.1f, 90f, 2f));
+        float wait_time = 3f;
+        state = "roaming";
+        if (is_object_close(10f) || is_turning)
+        {
+            if (!is_turning)
+            {
+                hold_time = Time.time;
+            }
+            StartCoroutine(Stop(0f));
+            is_turning = true;
+            if (is_right_closer() || is_turning_right)
+            {
+                is_turning_right = true;
+                print("i swear to god");
+                StartCoroutine(Turn(0.1f, -90f, 2f));
+            }
+            else
+            {
+                is_turning_right = false;
+                print("are you fucking kidding me???");
+                //StartCoroutine(Turn(0.1f, 90f, 2f));
+            }
+        }
+        else if(!is_turning)
+        {
+            StartCoroutine(MoveForward(0f));
+        }
+        if (Time.time > hold_time + wait_time)
+        {
+            is_turning = false;
+            is_turning_right = false;
+        }
+    }
+    bool is_object_close(float dist)
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.right, out hit, Mathf.Infinity))
+        {
+            //print(hit.distance);
+            if (hit.distance < dist) return true;
+            else return false;
+        }
+        return false;
+            
+    }
+    bool is_right_closer()
+    {
+        RaycastHit hit;
+        RaycastHit hit_2;
+        Transform right = transform;
+        right.rotation = Quaternion.Euler(90f, 0f, transform.rotation.z + 90);
+        Transform left = transform;
+        left.rotation = Quaternion.Euler(90f, 0f, transform.rotation.z - 90);
+
+
+
+        if (Physics.Raycast(transform.position, right.right, out hit, Mathf.Infinity))
+        {
+            if (Physics.Raycast(transform.position, left.right, out hit_2, Mathf.Infinity))
+            {
+                Debug.DrawRay(transform.position, right.right * hit.distance, Color.yellow);
+                Debug.DrawRay(transform.position, left.right * hit_2.distance, Color.yellow);
+                if (hit.distance < hit_2.distance) return true;
+                else return false;
+            }
+            return false;
+        }
+        return false;
     }
 
 

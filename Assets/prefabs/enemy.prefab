@@ -84,7 +84,7 @@ MonoBehaviour:
   bullet: {fileID: 4949970145546994738, guid: d200fbe17ccb2ff40a2c27b4e6a37a17, type: 3}
   muzzle_flash: {fileID: 1775902969291944596, guid: 3f6ec3fad8e92bf43a6d08e118da8e6e, type: 3}
   rotSpeed: 300
-  moveSpeed: 0
+  moveSpeed: 30
   player: {fileID: 0}
   time: 0
   rb: {fileID: 0}

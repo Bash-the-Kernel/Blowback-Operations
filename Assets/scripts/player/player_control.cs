@@ -73,11 +73,11 @@ public class player_control : MonoBehaviour
                     roof_removers.Add(r_r_slide);
                     if (hit.collider.tag == wall.tag)
                     {
-                        print("yes");
+                        //print("yes");
                     }
                     if (hit.collider.tag != wall.tag)
                     {
-                        print("no");
+                        //print("no");
                     }
                 }
                 else
