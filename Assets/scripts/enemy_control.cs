@@ -16,6 +16,7 @@ public class enemy_control : MonoBehaviour
     public bool is_turning = false;
     public bool is_turning_left = false;
     public float hold_time;
+    Quaternion target_rot = Quaternion.Euler(0f, 0f, 0f);
     // Start is called before the first frame update
     void Start()
     {
@@ -136,12 +137,18 @@ public class enemy_control : MonoBehaviour
         rb.velocity = new Vector3(0, 0, 0);
     }
 
-    IEnumerator Turn(float time, float degrees, float turnspeed)
+    IEnumerator Turn(float time, float degrees, float turnspeed, bool is_turning)
     {
+
         yield return new WaitForSeconds(time);
-        Quaternion target_rot = Quaternion.Euler(90f, 0f, transform.rotation.eulerAngles.y + 90);
+        if (!is_turning)
+        {
+            target_rot = Quaternion.Euler(90f, 0f, transform.eulerAngles.y + degrees);
+        }
+        //print(target_rot.eulerAngles.y + " KUNT");
+        //print(target_rot.eulerAngles.y + " YOU");
+        //print(transform.rotation.eulerAngles.y + "fugg (y)");
         transform.rotation = Quaternion.Slerp(transform.rotation, target_rot, turnspeed * Time.deltaTime);
-        print(transform.rotation.eulerAngles.y);
 
     }
 
@@ -191,7 +198,7 @@ public class enemy_control : MonoBehaviour
     {
         //StartCoroutine(Turn(0.1f, 180f, 0.5f));
         
-        float wait_time = 3f;
+        float wait_time = 1.5f;
         state = "roaming";
         if (is_object_close(10f) || is_turning)
         {
@@ -203,12 +210,12 @@ public class enemy_control : MonoBehaviour
             if ((is_right_closer() && is_turning == false) || is_turning_left)
             {
                 is_turning_left = true;
-                StartCoroutine(Turn(0.1f, -90f, 10f));
+                StartCoroutine(Turn(0.1f, -90f, 10f, is_turning));
             }
             else
             {
                 is_turning_left = false;
-                StartCoroutine(Turn(0.1f, 90f, 10f));
+                StartCoroutine(Turn(0.1f, 90f, 10f, is_turning));
             }
             is_turning = true;
         }
