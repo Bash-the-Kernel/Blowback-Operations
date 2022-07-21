@@ -14,7 +14,7 @@ public class enemy_control : MonoBehaviour
     public float time = 0f;
     public Rigidbody rb;
     public bool is_turning = false;
-    public bool is_turning_right = false;
+    public bool is_turning_left = false;
     public float hold_time;
     // Start is called before the first frame update
     void Start()
@@ -139,8 +139,9 @@ public class enemy_control : MonoBehaviour
     IEnumerator Turn(float time, float degrees, float turnspeed)
     {
         yield return new WaitForSeconds(time);
-        Quaternion target_rot = Quaternion.Euler(90f, 0f, transform.rotation.z + degrees);
+        Quaternion target_rot = Quaternion.Euler(90f, 0f, transform.rotation.eulerAngles.y + 90);
         transform.rotation = Quaternion.Slerp(transform.rotation, target_rot, turnspeed * Time.deltaTime);
+        print(transform.rotation.eulerAngles.y);
 
     }
 
@@ -199,19 +200,17 @@ public class enemy_control : MonoBehaviour
                 hold_time = Time.time;
             }
             StartCoroutine(Stop(0f));
-            is_turning = true;
-            if (is_right_closer() || is_turning_right)
+            if ((is_right_closer() && is_turning == false) || is_turning_left)
             {
-                is_turning_right = true;
-                print("i swear to god");
-                //StartCoroutine(Turn(0.1f, -90f, 2f));
+                is_turning_left = true;
+                StartCoroutine(Turn(0.1f, -90f, 10f));
             }
             else
             {
-                is_turning_right = false;
-                print("are you fucking kidding me???");
-                //StartCoroutine(Turn(0.1f, 90f, 2f));
+                is_turning_left = false;
+                StartCoroutine(Turn(0.1f, 90f, 10f));
             }
+            is_turning = true;
         }
         else if(!is_turning)
         {
@@ -220,13 +219,14 @@ public class enemy_control : MonoBehaviour
         if (Time.time > hold_time + wait_time)
         {
             is_turning = false;
-            is_turning_right = false;
+            is_turning_left = false;
         }
     }
     bool is_object_close(float dist)
     {
+        int layerMask = 1 << 7;
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.right, out hit, Mathf.Infinity))
+        if (Physics.Raycast(transform.position, transform.right, out hit, Mathf.Infinity, ~layerMask))
         {
             //print(hit.distance);
             if (hit.distance < dist) return true;
@@ -241,7 +241,7 @@ public class enemy_control : MonoBehaviour
         RaycastHit hit;
         RaycastHit hit_2;
         Vector3 right = Quaternion.Euler(0, 90, 0) * transform.right;
-        Vector3 left = Quaternion.Euler(0, 90, 0) * transform.right;
+        Vector3 left = Quaternion.Euler(0, -90, 0) * transform.right;
 
 
 
@@ -250,7 +250,7 @@ public class enemy_control : MonoBehaviour
             if (Physics.Raycast(transform.position, left, out hit_2, Mathf.Infinity, ~layerMask))
             {
                 Debug.DrawRay(transform.position, right * hit.distance, Color.red);
-                Debug.DrawRay(transform.position, left * hit_2.distance, Color.red);
+                Debug.DrawRay(transform.position, left * hit_2.distance, Color.blue);
                 if (hit.distance < hit_2.distance) return true;
                 else return false;
             }
