@@ -143,11 +143,8 @@ public class enemy_control : MonoBehaviour
         yield return new WaitForSeconds(time);
         if (!is_turning)
         {
-            target_rot = Quaternion.Euler(90f, 0f, transform.eulerAngles.y + degrees);
+            target_rot = Quaternion.Euler(90f, 0f, -(transform.eulerAngles.y + degrees));
         }
-        //print(target_rot.eulerAngles.y + " KUNT");
-        //print(target_rot.eulerAngles.y + " YOU");
-        //print(transform.rotation.eulerAngles.y + "fugg (y)");
         transform.rotation = Quaternion.Slerp(transform.rotation, target_rot, turnspeed * Time.deltaTime);
 
     }
@@ -205,18 +202,23 @@ public class enemy_control : MonoBehaviour
             if (!is_turning)
             {
                 hold_time = Time.time;
-            }
-            StartCoroutine(Stop(0f));
-            if ((is_right_closer() && is_turning == false) || is_turning_left)
-            {
-                is_turning_left = true;
-                StartCoroutine(Turn(0.1f, -90f, 10f, is_turning));
+                if (is_right_closer())
+                {
+                    print("turning left");
+                    StartCoroutine(Turn(0.1f, 270f, 30f, is_turning));
+                }
+                else
+                {
+                    print("turning right");
+                    StartCoroutine(Turn(0.1f, 90f, 30f, is_turning));
+                }
             }
             else
             {
-                is_turning_left = false;
-                StartCoroutine(Turn(0.1f, 90f, 10f, is_turning));
+                StartCoroutine(Turn(0.1f, 0f, 30f, is_turning));
             }
+
+            StartCoroutine(Stop(0f));
             is_turning = true;
         }
         else if(!is_turning)
@@ -226,7 +228,7 @@ public class enemy_control : MonoBehaviour
         if (Time.time > hold_time + wait_time)
         {
             is_turning = false;
-            is_turning_left = false;
+            //is_turning_left = false;
         }
     }
     bool is_object_close(float dist)
