@@ -13,13 +13,16 @@ public class bullet_controller_ : MonoBehaviour
     {
         //print("bruh wtf");
         rb.AddForce(transform.right * bullet_speed);
-        Physics.IgnoreCollision(col, transform.parent.GetComponent<BoxCollider>(), true);
-        Physics.IgnoreCollision(col, transform.parent.GetComponent<CapsuleCollider>(), true);
-        bang = transform.parent.GetComponent<AudioSource>();
-        bang.Play();
         Destroy(gameObject, 5);
 
 
+    }
+
+    public void owner(Transform owner)
+    {
+        Physics.IgnoreCollision(col, owner.GetComponent<CapsuleCollider>(), true);
+        bang = owner.GetComponent<AudioSource>();
+        bang.Play();
     }
 
     

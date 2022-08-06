@@ -30,11 +30,11 @@ public class player_control : MonoBehaviour
         see_under_rooves();
         ProcessInputs();
         death_check();
+        faceMouse();
     }
 
     void FixedUpdate()
     {
-        faceMouse();
         Move();
         rb.isKinematic = false;
     }
@@ -62,7 +62,7 @@ public class player_control : MonoBehaviour
 
                         }
                     }
-                    Debug.DrawRay(transform.position, direction, Color.green);
+                    //Debug.DrawRay(transform.position, direction, Color.green);
                     Vector3 position = transform.position + direction * distance/2;
                     Quaternion rotation = transform.rotation;
                     rotation.z += i;
@@ -82,7 +82,7 @@ public class player_control : MonoBehaviour
                 }
                 else
                 {
-                    Debug.DrawRay(transform.position, direction, Color.yellow);
+                    //Debug.DrawRay(transform.position, direction, Color.yellow);
                 }
             }
         }
@@ -106,11 +106,12 @@ public class player_control : MonoBehaviour
 
     void faceMouse()
     {
+        Debug.DrawRay(transform.position, transform.right, Color.green);
         Vector3 mousePosition = Input.mousePosition;
         mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
-        Vector3 direction = new Vector3(mousePosition.x - transform.position.x, mousePosition.z - transform.position.z,0);
+        Vector3 direction = new Vector3(mousePosition.x - transform.position.x, 0, mousePosition.z - transform.position.z);
         transform.right = direction;
-        transform.rotation = Quaternion.Euler(90, 0, transform.rotation.eulerAngles.z);
+        transform.rotation = Quaternion.Euler(90, transform.rotation.eulerAngles.y, 0);
     }
 
 
@@ -132,7 +133,24 @@ public class player_control : MonoBehaviour
         }
 
     }
+    float AngleDir(Vector3 fwd, Vector3 targetDir, Vector3 up)
+    {
+        Vector3 perp = Vector3.Cross(fwd, targetDir);
+        float dir = Vector3.Dot(perp, up);
 
+        if (dir > 0f)
+        {
+            return 1f;
+        }
+        else if (dir < 0f)
+        {
+            return -1f;
+        }
+        else
+        {
+            return 0f;
+        }
+    }
     void shoot()
     {
         Quaternion bullet_rot = transform.rotation;
@@ -143,8 +161,10 @@ public class player_control : MonoBehaviour
         bullet_pos.y = 3;
         //print(transform.rotation.eulerAngles.x);
         bullet_rot.eulerAngles.Set(90, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-        Instantiate(bullet, bullet_pos, bullet_rot, transform);
+        GameObject bullet_inst = Instantiate(bullet, bullet_pos, bullet_rot);
+        bullet_inst.GetComponent<bullet_controller_>().owner(transform);
         Instantiate(muzzle_flash, flash_pos, bullet_rot, transform);
+
     }
 
     void Move()

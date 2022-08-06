@@ -161,7 +161,8 @@ public class enemy_control : MonoBehaviour
         bullet_pos.y = 3;
         //print(transform.rotation.eulerAngles.x);
         //bullet_rot.eulerAngles.Set(90, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-        Instantiate(bullet, bullet_pos, bullet_rot, transform);
+        GameObject bullet_inst = Instantiate(bullet, bullet_pos, bullet_rot);
+        bullet_inst.GetComponent<bullet_controller_>().owner(transform);
         Instantiate(muzzle_flash, flash_pos, bullet_rot, transform);
 
     }
