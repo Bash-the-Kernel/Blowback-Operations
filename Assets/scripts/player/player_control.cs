@@ -14,6 +14,7 @@ public class player_control : MonoBehaviour
     public float moveSpeed;
     public GameObject bullet;
     public GameObject muzzle_flash;
+    public AudioSource walk;
     public bool is_alive = true;
     // Start is called before the first frame update
     void Start()
@@ -171,7 +172,15 @@ public class player_control : MonoBehaviour
     {
         //animate movement and then move
         rb.velocity = new Vector3(moveDirection.x * moveSpeed, 0, moveDirection.z * moveSpeed);
-
+        
+        if(moveDirection.x != 0 || moveDirection.z != 0)
+        {
+            walk.UnPause();
+        }
+        else
+        {
+            walk.Pause();
+        }
     }
 
 }

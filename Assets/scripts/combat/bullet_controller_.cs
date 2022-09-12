@@ -21,7 +21,7 @@ public class bullet_controller_ : MonoBehaviour
     public void owner(Transform owner)
     {
         Physics.IgnoreCollision(col, owner.GetComponent<CapsuleCollider>(), true);
-        bang = owner.GetComponent<AudioSource>();
+        bang = owner.GetChild(4).GetComponent<AudioSource>();
         bang.Play();
     }
 

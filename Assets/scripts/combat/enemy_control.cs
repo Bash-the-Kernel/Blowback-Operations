@@ -5,29 +5,174 @@ using UnityEngine;
 public class enemy_control : MonoBehaviour
 {
     public bool is_alive = true;
-    string state;
+    public string state;
+
     public GameObject bullet;
     public GameObject muzzle_flash;
+
+    public GameObject L_foot;
+    public GameObject R_foot;
+    public GameObject L_foot_red;
+    public GameObject R_foot_red;
+
+    public AudioSource walk;
     public float rotSpeed;
     public float moveSpeed;
+
     public GameObject player;
+
     public float time = 0f;
+
     public Rigidbody rb;
     public bool is_turning = false;
     public bool is_turning_left = false;
+
     public float hold_time;
+
+    public Renderer enemy_render;
+
+    public bool is_making_footprints = false;
+
     Quaternion target_rot = Quaternion.Euler(0f, 0f, 0f);
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        enemy_render = GetComponent<Renderer>();
         player = GameObject.Find("player");
+        StartCoroutine(make_foot_steps());
     }
     // Update is called once per frame
     void FixedUpdate()
     {
         death_check();
         action_control();
+    }
+    void foot_sound_controller()
+    {
+        if (can_they_hear_me(player))
+        {
+            if(can_See(player) && enemy_render.isVisible)
+            {
+                walk.Pause();
+            }
+            else
+            {
+                walk.UnPause();
+            }
+           
+        }
+        else
+        {
+            walk.Pause();
+        }
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            collision.gameObject.GetComponent<player_control>().is_alive = false;
+        }
+    }
+        void Update()
+    {
+        foot_sound_controller();
+        if (can_they_see_me(player))
+        {
+            gameObject.GetComponent<Renderer>().enabled = true;
+            is_making_footprints = false;
+        }
+        else
+        {
+            gameObject.GetComponent<Renderer>().enabled = false;
+            if (can_they_hear_me(player))
+            {
+                    is_making_footprints = true;
+            }
+            else
+            {
+                is_making_footprints = false;
+            }
+        }
+    }
+
+    IEnumerator make_foot_steps()
+    {
+        while (true)
+        {
+            print("lets goooo");
+            if(state == "attacking" && is_making_footprints)
+            {
+                Vector3 LeftFootPos = transform.Find("L_foot_pos").transform.position;
+                Instantiate(L_foot_red, LeftFootPos, transform.rotation);
+                yield return new WaitForSeconds(.2f);
+                Vector3 RightFootPos = transform.Find("R_foot_pos").transform.position;
+                Instantiate(R_foot_red, RightFootPos, transform.rotation);
+            }
+            else if(is_making_footprints)
+            {
+                Vector3 LeftFootPos = transform.Find("L_foot_pos").transform.position;
+                Instantiate(L_foot, LeftFootPos, transform.rotation);
+                yield return new WaitForSeconds(.2f);
+                Vector3 RightFootPos = transform.Find("R_foot_pos").transform.position;
+                Instantiate(R_foot, RightFootPos, transform.rotation);
+            }
+            yield return new WaitForSeconds(.2f);
+        }
+
+    }
+
+    bool can_they_hear_me(GameObject target)
+    {
+        Vector3 direction = new Vector3(transform.position.x - target.transform.position.x, 0, transform.position.z - target.transform.position.z);
+
+        int layerMask = 1 << 8;
+
+        Vector3 startpos = target.transform.position;
+        startpos.y = 2;
+        RaycastHit hit;
+        if (Physics.Raycast(startpos, direction, out hit, Mathf.Infinity, ~layerMask))
+        {
+            if (hit.distance < 60 && hit.collider.tag == gameObject.tag)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+    bool can_they_see_me(GameObject target)
+    {
+        Vector3 direction = new Vector3(transform.position.x - target.transform.position.x, 0, transform.position.z - target.transform.position.z);
+
+        int layerMask = 1 << 8;
+
+        Vector3 startpos = target.transform.position;
+        startpos.y = 2;
+        RaycastHit hit;
+        if (Physics.Raycast(startpos, direction, out hit, Mathf.Infinity, ~layerMask))
+        {
+            if (Vector3.Angle(direction, target.transform.right) < 80 && hit.collider.tag == gameObject.tag)
+            {
+                Debug.DrawRay(startpos, direction * hit.distance, Color.magenta);
+                return true;
+            }
+            else
+            {
+                Debug.DrawRay(startpos, direction * hit.distance, Color.cyan);
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
     }
 
     void death_check()
@@ -44,10 +189,18 @@ public class enemy_control : MonoBehaviour
         {
             state = "attacking";
             StartCoroutine(RotateTowards(0.2f, player.transform.position));
-            if (Time.time - time >= 0.3f)
+            if (enemy_render.isVisible)
             {
-                StartCoroutine(shoot(0.1f));
-                time = Time.time;
+
+                if (Time.time - time >= 0.3f)
+                {
+                    StartCoroutine(shoot(0.1f));
+                    time = Time.time;
+                }
+            }
+            else
+            {
+                StartCoroutine(MoveForward(0.2f));
             }
         }
         else
@@ -205,12 +358,10 @@ public class enemy_control : MonoBehaviour
                 hold_time = Time.time;
                 if (is_right_closer())
                 {
-                    print("turning left");
                     StartCoroutine(Turn(0.1f, 270f, 30f, is_turning));
                 }
                 else
                 {
-                    print("turning right");
                     StartCoroutine(Turn(0.1f, 90f, 30f, is_turning));
                 }
             }
