@@ -84,8 +84,23 @@ public class audio_visual : MonoBehaviour
         UpdateVisual();
         UpdatePos();
         is_enemy_visible();
+        is_dead();
     }
 
+    private void is_dead()
+    {
+        if (gameObject.GetComponent<player_control>())
+        {
+            if (!gameObject.GetComponent<player_control>().is_alive)
+            {
+                for (int i = 0; i < amnVisual; i++)
+                {
+                    Destroy(visualList[i].gameObject);
+                }
+            }
+
+        }
+    }
     private void is_enemy_visible()
     {
         //does the opposite of the enemy
@@ -103,6 +118,14 @@ public class audio_visual : MonoBehaviour
             {
                 visualList[i].gameObject.GetComponentInChildren<Renderer>().enabled = true;
             }
+        }
+    }
+
+    private void is_alive()
+    {
+        for (int i = 0; i < amnVisual; i++)
+        {
+            visualList[i].gameObject.GetComponentInChildren<Renderer>().enabled = false;
         }
     }
 

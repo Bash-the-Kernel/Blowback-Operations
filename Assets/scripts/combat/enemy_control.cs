@@ -15,6 +15,8 @@ public class enemy_control : MonoBehaviour
     public GameObject L_foot_red;
     public GameObject R_foot_red;
 
+    public GameObject Score_sheet;
+
     public AudioSource walk;
     public float rotSpeed;
     public float moveSpeed;
@@ -37,6 +39,7 @@ public class enemy_control : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Score_sheet = GameObject.Find("paper_ui");
         rb = GetComponent<Rigidbody>();
         enemy_render = GetComponent<Renderer>();
         player = GameObject.Find("player");
@@ -100,7 +103,6 @@ public class enemy_control : MonoBehaviour
     {
         while (true)
         {
-            print("lets goooo");
             if(state == "attacking" && is_making_footprints)
             {
                 Vector3 LeftFootPos = transform.Find("L_foot_pos").transform.position;
@@ -179,6 +181,7 @@ public class enemy_control : MonoBehaviour
     {
         if (!is_alive)
         {
+            Score_sheet.GetComponent<death_counter>().deaths++;
             Destroy(gameObject);
         }
     }

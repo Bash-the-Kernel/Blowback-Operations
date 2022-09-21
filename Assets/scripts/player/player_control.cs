@@ -93,7 +93,7 @@ public class player_control : MonoBehaviour
     {
         if (!is_alive)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+            //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
         }
     }
 
