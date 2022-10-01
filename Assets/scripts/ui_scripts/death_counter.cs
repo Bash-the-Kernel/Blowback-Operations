@@ -35,7 +35,7 @@ public class death_counter : MonoBehaviour
         if ((deaths-1)%5 == 0  && tally_num < deaths)
         {
             GameObject Tally_inst = Instantiate(Tally, gameObject.transform);
-            Tally_inst.GetComponent<RectTransform>().anchoredPosition = new Vector3((tally_num/5)*30, 0, 0);
+            Tally_inst.GetComponent<RectTransform>().anchoredPosition = new Vector3((tally_num/5)*15, 0, 0);
             Tally_list.Add(Tally_inst);
             tally_num++;
             StartCoroutine(score_anim());

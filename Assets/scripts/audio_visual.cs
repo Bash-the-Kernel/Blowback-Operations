@@ -10,6 +10,8 @@ public class audio_visual : MonoBehaviour
     public float dbValue;
     public float pitchValue;
 
+    public bool is_circle;
+
     public float maxVisualScale = 25.0f;
     public float visualModifier = 50.0f;
     public float smoothSpeed = 10.0f;
@@ -35,9 +37,14 @@ public class audio_visual : MonoBehaviour
         spectrum = new float[SAMPLE_SIZE];
         sampleRate = AudioSettings.outputSampleRate;
         enemy_render = GetComponent<Renderer>();
-
-        //spawnLine();
-        spawnCircle();
+        if (is_circle)
+        {
+            spawnCircle();
+        }
+        else
+        {
+            spawnLine();
+        }
     }
 
     private void spawnLine()

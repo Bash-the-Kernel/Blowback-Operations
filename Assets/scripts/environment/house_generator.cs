@@ -10,6 +10,7 @@ public class house_generator : MonoBehaviour
     public GameObject doorway;
     public GameObject floor;
     public GameObject roof;
+    public GameObject light;
     private GameObject floor_;
     private GameObject roof_;
     public Transform player;
@@ -61,6 +62,8 @@ public class house_generator : MonoBehaviour
 
         GameObject door_way = Instantiate(doorway, new Vector3(-0.5f * width + l_f_width + 5, 1, -0.5f * (length - 1)) + transform.position, norm_rot_x, transform);
         door_way.transform.localScale = new Vector3(10, 1, 18);
+
+        GameObject house_light = Instantiate(light, new Vector3(0,9.8f,0) + transform.position, norm_rot_x, transform);
 
         Vector3 floor_pos = transform.position;
         floor_pos.y -= 0.9f;

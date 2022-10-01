@@ -278,6 +278,7 @@ MonoBehaviour:
   R_foot: {fileID: 1391415245843735961, guid: 033b9588c01cba847ae097808855d60b, type: 3}
   L_foot_red: {fileID: 5534766478102553988, guid: 05f64514017dac54e960a38c450dd30a, type: 3}
   R_foot_red: {fileID: 2597989724689778659, guid: 640cd55e59b79c6439b3899341a061d7, type: 3}
+  Score_sheet: {fileID: 0}
   walk: {fileID: -7827891730033034685}
   rotSpeed: 300
   moveSpeed: 30
@@ -481,11 +482,13 @@ MonoBehaviour:
   rmsValue: 0
   dbValue: 0
   pitchValue: 0
+  is_circle: 1
   maxVisualScale: 10
   visualModifier: 175
   smoothSpeed: 10
   keepPercentage: 0.25
   aud_vis_ball: {fileID: 2533267791883499736, guid: 18a0271c314905e4db3e069c1174b734, type: 3}
+  enemy_render: {fileID: 0}
 --- !u!1 &8773287513737863663
 GameObject:
   m_ObjectHideFlags: 0

@@ -48,6 +48,7 @@ MonoBehaviour:
   doorway: {fileID: 8083306309537193433, guid: 9ee4c6cedd8d24b49aba7ca0445c4e5f, type: 3}
   floor: {fileID: 8260857557115923289, guid: f48c1d8cfe1253f47a175c3b5c30e0fe, type: 3}
   roof: {fileID: 7181516067985257843, guid: 47d9c595f4ed40646844e913628c31c7, type: 3}
+  light: {fileID: 8352775847880825678, guid: bdb7687fdf302954990c3ddf2ae7fab6, type: 3}
   player: {fileID: 0}
   nature_parent: {fileID: 0}
   player_girth: 7
