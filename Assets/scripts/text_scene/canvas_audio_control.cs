@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class canvas_audio_control : MonoBehaviour
 {
     private GameObject text;
@@ -17,6 +17,7 @@ public class canvas_audio_control : MonoBehaviour
         if (text.GetComponent<text_typing>().is_done)
         {
             gameObject.GetComponent<AudioSource>().Pause();
+            SceneManager.LoadScene(1);
         }
     }
 }

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class main_menu : MonoBehaviour
+public class enemy_checker : MonoBehaviour
 {
-    public void PlayGame()
+    void Update()
     {
-        SceneManager.LoadScene(1);
+        if (transform.childCount == 0) SceneManager.LoadScene(2);
     }
 }
