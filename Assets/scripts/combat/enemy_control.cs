@@ -21,6 +21,8 @@ public class enemy_control : MonoBehaviour
     public float rotSpeed;
     public float moveSpeed;
 
+    public GameObject blood;
+
     public GameObject player;
 
     public float time = 0f;
@@ -181,8 +183,21 @@ public class enemy_control : MonoBehaviour
     {
         if (!is_alive)
         {
+            make_blood();
             Score_sheet.GetComponent<death_counter>().deaths++;
             Destroy(gameObject);
+        }
+    }
+
+    void make_blood()
+    {
+        int n_of_spots = Random.Range(2, 7);
+        for (int i = 0; i < n_of_spots; i++)
+        {
+            float Random_variance_x = Random.Range(-3f, 3f);
+            float Random_variance_y = Random.Range(-3f, 3f);
+            Vector3 pos = new Vector3(transform.position.x + Random_variance_x, 1, transform.position.z + Random_variance_y);
+            Instantiate(blood, pos, transform.rotation);
         }
     }
 

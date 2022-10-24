@@ -282,6 +282,7 @@ MonoBehaviour:
   walk: {fileID: -7827891730033034685}
   rotSpeed: 300
   moveSpeed: 30
+  blood: {fileID: 7278594580736559195, guid: d04d8225ebf18514682e865a6735535d, type: 3}
   player: {fileID: 0}
   time: 0
   rb: {fileID: 0}

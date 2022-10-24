@@ -6,6 +6,10 @@ public class canvas_audio_control : MonoBehaviour
 {
     private GameObject text;
     // Start is called before the first frame update
+    public void PlayGame()
+    {
+        SceneManager.LoadScene(1);
+    }
     void Start()
     {
         text = GameObject.Find("cut_scene_text");
@@ -17,7 +21,8 @@ public class canvas_audio_control : MonoBehaviour
         if (text.GetComponent<text_typing>().is_done)
         {
             gameObject.GetComponent<AudioSource>().Pause();
-            SceneManager.LoadScene(1);
+            PlayGame();
         }
     }
+
 }

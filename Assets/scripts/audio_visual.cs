@@ -96,9 +96,9 @@ public class audio_visual : MonoBehaviour
 
     private void is_dead()
     {
-        if (gameObject.GetComponent<player_control>())
+        if (gameObject.GetComponent<enemy_control>())
         {
-            if (!gameObject.GetComponent<player_control>().is_alive)
+            if (!gameObject.GetComponent<enemy_control>().is_alive)
             {
                 for (int i = 0; i < amnVisual; i++)
                 {
