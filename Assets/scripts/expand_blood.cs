@@ -17,7 +17,7 @@ public class expand_blood : MonoBehaviour
         while(size < max_size)
         {
             size+= max_size/700f;
-            transform.localScale = new Vector3 (size, size, 0);
+            transform.localScale = new Vector3 (size, size, 0.1f);
             yield return null;
         }
     }
